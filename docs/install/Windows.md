@@ -4,9 +4,10 @@
 
 ### 1、操作系统依赖
 
+由于默认的kunpeng库为64位的，需要操作系统和python版本均为64位才可正常加载kunpeng漏洞库，如果有特别需要，可自行编译32位的kunpeng替换即可。
+
 安装 `python` 解释器:
 
-* https://sec.ly.com/mirror/python-2.7.13.msi
 * https://sec.ly.com/mirror/python-2.7.13.amd64.msi
 
 ### 2、python 依赖库
@@ -55,9 +56,11 @@ $ mongo 127.0.0.1:65521/xunfeng
 $ mongorestore.exe -h 127.0.0.1 --port 65521 -d xunfeng db 
 ```
 
+导入后关闭mongod.exe进程
+
 ### 3. 修改配置
 
-修改系统数据库配置脚本 `Config.py`:
+修改系统数据库配置脚本 `config.py`:
 
 ```
 class Config(object):
@@ -78,10 +81,10 @@ class ProductionConfig(Config):
 
 ### 4. 运行系统
 
-根据实际情况修改 `Conifg.py` 和 `Run.bat` 文件后, 执行:
+根据实际情况修改 `conifg.py` 和 `run.bat` 文件后, 执行:
 
 ```
-> Run.bat
+> run.bat
 ```
 
 _要用MASSCAN的话需要安装WinPcap_

@@ -133,8 +133,7 @@ EOF
                 fi
             }
             apt_get_update
-            $sh_c 'apt-get install -y -q curl wget unzip gcc libssl-dev libffi-dev python-dev libpcap-dev python-pip git whiptail supervisor'
-            $sh_c 'pip install -U pip'
+            $sh_c 'apt-get install -y -q curl wget unzip gcc libssl-dev libffi-dev python-dev libpcap-dev git whiptail supervisor'
             if [ ! -f /usr/lib/x86_64-linux-gnu/libpcap.so.1 ]; then
                 $sh_c 'ln -s /usr/lib/x86_64-linux-gnu/libpcap.so /usr/lib/x86_64-linux-gnu/libpcap.so.1'
             fi
@@ -159,7 +158,6 @@ EOF
                 (
                     set -x
                     $sh_c 'sleep 3; yum -y -q install epel-release curl wget unzip gcc git libffi-devel python-devel openssl-devel libpcap-devel newt.x86_64 supervisor ncurses-devel ncurses make g++ gcc-c++ automake autoconf libtool'
-                    $sh_c 'yum -y install python-pip'
                 )
             fi
             if ! command_exists start-stop-daemon; then
@@ -188,6 +186,10 @@ EOF
             ;;
     esac
 
+    # install pip
+    $sh_c 'curl https://bootstrap.pypa.io/get-pip.py|python2.7'
+    $sh_c 'pip install -U pip -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com'
+	    
     if [ ! -d /opt/xunfeng ]; then
         # clone repo
         $sh_c 'git clone ${XUNFENG_REPO} /opt/xunfeng'
@@ -205,7 +207,7 @@ EOF
     # install requirements
     $sh_c 'pip install --upgrade pip'
     $sh_c 'pip install --upgrade supervisor>=3.3'
-    $sh_c 'pip install meld3==1.0.0 -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com'
+    # $sh_c 'pip install meld3==1.0.0 -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com'
     # $sh_c 'wget -qO /tmp/meld3-1.0.2.tar.gz https://pypi.python.org/packages/source/m/meld3/meld3-1.0.2.tar.gz && tar -zxf /tmp/meld3-1.0.2.tar.gz -C /tmp/ && cd /tmp/meld3-1.0.2/ && /usr/bin/env python setup.py install && cd - && rm -rf /tmp/meld3*'
     $sh_c 'pip install -r /opt/xunfeng/requirements.txt -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com'
     sdpid=$(ps -ef | grep supervisord | grep -v grep | awk '{print $2}')
